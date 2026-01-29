@@ -1,0 +1,192 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* Default Dark Mode */
+:root {
+  --background: #0f0a0a;
+  --foreground: #f0f0f0;
+  --card: #1a1410;
+  --card-foreground: #f0f0f0;
+  --popover: #1a1410;
+  --popover-foreground: #f0f0f0;
+  --primary: #ff8c00;
+  --primary-foreground: #ffffff;
+  --secondary: #ff6b35;
+  --secondary-foreground: #ffffff;
+  --muted: #2d241f;
+  --muted-foreground: #9ca3af;
+  --accent: #ffa500;
+  --accent-foreground: #000000;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --border: #2d241f;
+  --input: #2d241f;
+  --ring: #ff8c00;
+  --chart-1: #ff8c00;
+  --chart-2: #ff6b35;
+  --chart-3: #ffa500;
+  --chart-4: #8b5cf6;
+  --chart-5: #06b6d4;
+  --radius: 0.75rem;
+  --sidebar: #1a1410;
+  --sidebar-foreground: #f0f0f0;
+  --sidebar-primary: #ff8c00;
+  --sidebar-primary-foreground: #000000;
+  --sidebar-accent: #ff6b35;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #2d241f;
+  --sidebar-ring: #ff8c00;
+}
+
+/* Light Mode */
+.light {
+  --background: #f5f0f8;
+  --foreground: #1a1420;
+  --card: #ffffff;
+  --card-foreground: #1a1420;
+  --popover: #ffffff;
+  --popover-foreground: #1a1420;
+  --primary: #7c3aed;
+  --primary-foreground: #ffffff;
+  --secondary: #a855f7;
+  --secondary-foreground: #ffffff;
+  --muted: #e5d9f2;
+  --muted-foreground: #6b7280;
+  --accent: #8b5cf6;
+  --accent-foreground: #ffffff;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --border: #ddd4e8;
+  --input: #f3f0f7;
+  --ring: #7c3aed;
+  --chart-1: #7c3aed;
+  --chart-2: #a855f7;
+  --chart-3: #d946ef;
+  --chart-4: #8b5cf6;
+  --chart-5: #06b6d4;
+  --radius: 0.75rem;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #1a1420;
+  --sidebar-primary: #7c3aed;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #a855f7;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #ddd4e8;
+  --sidebar-ring: #7c3aed;
+}
+
+@theme inline {
+  --font-sans: "Geist", "Geist Fallback";
+  --font-mono: "Geist Mono", "Geist Mono Fallback";
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    /* Dark mode gradient (default): Pure black to deep orange */
+    @apply bg-gradient-to-br from-black via-black to-orange-950 text-foreground min-h-screen;
+    background-attachment: fixed;
+  }
+
+  body.light {
+    /* Light mode gradient: White to purple */
+    @apply bg-gradient-to-br from-white via-purple-50 to-purple-100;
+  }
+}
+
+@layer utilities {
+  .bg-main {
+    @apply bg-gradient-to-br from-black via-black to-orange-950;
+  }
+  .light .bg-main {
+    @apply from-white via-purple-50 to-purple-100;
+  }
+}
+
+@layer components {
+  /* Dark mode glass effects */
+  .glass {
+    @apply backdrop-blur-xl bg-white/10 border border-white/20 shadow-2xl;
+  }
+
+  .glass-secondary {
+    @apply backdrop-blur-lg bg-white/5 border border-white/15 shadow-lg;
+  }
+
+  .glass-dark {
+    @apply backdrop-blur-xl bg-black/40 border border-white/10 shadow-2xl;
+  }
+
+  /* Light mode glass effects */
+  .light .glass {
+    @apply backdrop-blur-xl bg-white/70 border border-purple-200/50 shadow-2xl;
+  }
+
+  .light .glass-secondary {
+    @apply backdrop-blur-lg bg-white/60 border border-purple-200/30 shadow-lg;
+  }
+
+  .light .glass-dark {
+    @apply backdrop-blur-xl bg-purple-100/40 border border-purple-200/40 shadow-lg;
+  }
+
+  .pulse-glow {
+    @apply animate-pulse shadow-lg shadow-orange-500/50;
+  }
+
+  .gradient-trust {
+    @apply bg-gradient-to-r from-orange-600 to-orange-500;
+  }
+
+  .gradient-action {
+    @apply bg-gradient-to-r from-orange-500 to-orange-400;
+  }
+
+  .light .gradient-trust {
+    @apply bg-gradient-to-r from-purple-600 to-purple-500;
+  }
+
+  .light .gradient-action {
+    @apply bg-gradient-to-r from-purple-500 to-purple-400;
+  }
+}
