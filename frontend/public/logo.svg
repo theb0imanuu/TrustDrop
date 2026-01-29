@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg
+  width="512"
+  height="512"
+  viewBox="0 0 512 512"
+  xmlns="http://www.w3.org/2000/svg"
+  aria-label="Location Pin Logo"
+  role="img">
+
+  <defs>
+    <!-- Purple gradient -->
+    <linearGradient id="purpleGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#E04BFF"/>
+      <stop offset="100%" stop-color="#7B2FFF"/>
+    </linearGradient>
+
+    <!-- Soft shadow -->
+    <filter id="shadow" x="-25%" y="-25%" width="150%" height="150%">
+      <feDropShadow dx="0" dy="10" stdDeviation="16" flood-opacity="0.28"/>
+    </filter>
+  </defs>
+
+  <!-- Location pin -->
+  <path
+    d="M256 96
+       C320 96 368 144 368 208
+       C368 296 256 416 256 416
+       C256 416 144 296 144 208
+       C144 144 192 96 256 96 Z"
+    fill="url(#purpleGrad)"
+    filter="url(#shadow)"/>
+
+  <!-- Pin hole -->
+  <circle cx="256" cy="208" r="42" fill="#2B2B2B"/>
+
+  <!-- Check mark -->
+  <path
+    d="M236 276
+       L254 294
+       L292 256"
+    fill="none"
+    stroke="#FFFFFF"
+    stroke-width="12"
+    stroke-linecap="round"
+    stroke-linejoin="round"/>
+</svg>
