@@ -46,6 +46,46 @@ const mockOrders = [
     amount: "Ksh 340.00",
     time: "45 mins ago",
   },
+  {
+    id: "6",
+    recipient: "Esi Addo",
+    location: "Tamale, Northern",
+    status: "pending" as const,
+    amount: "Ksh 210.00",
+    time: "55 mins ago",
+  },
+  {
+    id: "7",
+    recipient: "Kojo Baah",
+    location: "Koforidua, Eastern",
+    status: "delivered" as const,
+    amount: "Ksh 150.25",
+    time: "2 hours ago",
+  },
+  {
+    id: "8",
+    recipient: "Akua Danso",
+    location: "Sunyani, Brong-Ahafo",
+    status: "dispatched" as const,
+    amount: "Ksh 275.50",
+    time: "3 hours ago",
+  },
+  {
+    id: "9",
+    recipient: "Fiifi Sowah",
+    location: "Ho, Volta",
+    status: "in_transit" as const,
+    amount: "Ksh 320.00",
+    time: "4 hours ago",
+  },
+  {
+    id: "10",
+    recipient: "Adjoa Mansa",
+    location: "Wa, Upper West",
+    status: "pending" as const,
+    amount: "Ksh 180.00",
+    time: "5 hours ago",
+  },
 ];
 
 export default function Dashboard() {
@@ -146,13 +186,13 @@ export default function Dashboard() {
             )}
 
             {/* Orders List */}
-            <div className="space-y-0">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {filteredOrders.length > 0 ? (
                 filteredOrders.map((order) => (
                   <OrderRow key={order.id} {...order} />
                 ))
               ) : (
-                <div className="text-center py-12 text-muted-foreground">
+                <div className="col-span-full text-center py-12 text-muted-foreground">
                   No orders found matching this filter.
                 </div>
               )}
