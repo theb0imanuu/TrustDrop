@@ -1,95 +1,33 @@
 "use client";
 
 import { OrderRow } from "@/components/dashboard/order-row";
+import { getOrders } from "@/lib/api";
+import { Order } from "@/lib/types";
+import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-
-const mockOrders = [
-  {
-    id: "1",
-    recipient: "Kofi Mensah",
-    location: "Accra Central, Ghana",
-    status: "in_transit" as const,
-    amount: "Ksh 250.00",
-    time: "2 mins ago",
-  },
-  {
-    id: "2",
-    recipient: "Ama Osei",
-    location: "Kumasi, Ashanti",
-    status: "dispatched" as const,
-    amount: "Ksh 180.50",
-    time: "15 mins ago",
-  },
-  {
-    id: "3",
-    recipient: "Kwame Asare",
-    location: "Tema, Greater Accra",
-    status: "pending" as const,
-    amount: "Ksh 425.00",
-    time: "32 mins ago",
-  },
-  {
-    id: "4",
-    recipient: "Abena Boateng",
-    location: "Cape Coast, Central",
-    status: "delivered" as const,
-    amount: "Ksh 195.75",
-    time: "1 hour ago",
-  },
-  {
-    id: "5",
-    recipient: "Yaw Amoah",
-    location: "Sekondi-Takoradi",
-    status: "in_transit" as const,
-    amount: "Ksh 340.00",
-    time: "45 mins ago",
-  },
-  {
-    id: "6",
-    recipient: "Nana Akosua",
-    location: "Takoradi, Western",
-    status: "delivered" as const,
-    amount: "Ksh 275.25",
-    time: "2 hours ago",
-  },
-  {
-    id: "7",
-    recipient: "Kwesi Boakye",
-    location: "Obuasi, Ashanti",
-    status: "pending" as const,
-    amount: "Ksh 520.00",
-    time: "3 hours ago",
-  },
-];
 
 export default function OrdersPage() {
   const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
+  const { data: orders = [], isLoading, error } = useQuery<Order[], Error>({
+    queryKey: ["orders"],
+    queryFn: getOrders,
+  });
 
   const filteredOrders = selectedStatus
-    ? mockOrders.filter((order) => order.status === selectedStatus)
-    : mockOrders;
+    ? orders.filter((order) => order.status === selectedStatus)
+    : orders;
 
   const statuses = [
-    { key: "all", label: "All Orders", count: mockOrders.length },
-    {
-      key: "pending",
-      label: "Pending",
-      count: mockOrders.filter((o) => o.status === "pending").length,
-    },
+    { key: "all", label: "All Orders", count: orders.length },
     {
       key: "dispatched",
       label: "Dispatched",
-      count: mockOrders.filter((o) => o.status === "dispatched").length,
-    },
-    {
-      key: "in_transit",
-      label: "In Transit",
-      count: mockOrders.filter((o) => o.status === "in_transit").length,
+      count: orders.filter((o) => o.status === "dispatched").length,
     },
     {
       key: "delivered",
       label: "Delivered",
-      count: mockOrders.filter((o) => o.status === "delivered").length,
+      count: orders.filter((o) => o.status === "delivered").length,
     },
   ];
 
@@ -138,8 +76,16 @@ export default function OrdersPage() {
                 : "All Orders"}
             </h2>
 
-            {filteredOrders.length > 0 ? (
-              <div className="space-y-0">
+            {isLoading ? (
+              <div className="text-center py-12">
+                <p className="text-muted-foreground">Loading orders...</p>
+              </div>
+            ) : error ? (
+              <div className="text-center py-12">
+                <p className="text-red-500">Failed to load orders.</p>
+              </div>
+            ) : filteredOrders.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {filteredOrders.map((order) => (
                   <OrderRow key={order.id} {...order} />
                 ))}

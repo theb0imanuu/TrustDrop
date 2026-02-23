@@ -1,139 +1,65 @@
-# 🛡️ TrustDrop
+# TrustDrop
 
-**TrustDrop** is a secure **Two-Factor Handover (2FH)** verification system built to solve the trust gap in African e-commerce.  
-It ensures deliveries are only marked as **Successful** when a customer provides a unique release code to the rider, verified instantly via **USSD**.
+TrustDrop is a delivery management system that allows businesses to manage their orders and deliveries. It provides a dashboard for managing orders, dispatching riders, and tracking deliveries.
 
-> **Note:** This project was developed for the **Africa's Talking Hackathon (2026)** to demonstrate the power of **low‑tech, high‑security** solutions for the *next billion users*.
+## Features
 
----
+-   **Order Management:** Create, view, and manage orders.
+-   **Dispatch Management:** Assign orders to riders for delivery.
+-   **Real-time Tracking:** Track the status of deliveries in real-time.
+-   **Reporting and Analytics:** Generate reports and view analytics on orders and deliveries.
 
-## 🚀 The Problem
-
-In many African markets:
-
-- **Pay on Delivery** → Risky for sellers (cash theft, rider fraud)
-- **Pre‑payment** → Risky for customers (non‑delivery)
-
-**TrustDrop bridges this gap** by replacing physical trust with a **digital handshake**.
-
----
-
-## ✨ Key Features
-
-- 🔐 **Automated 2FA** – Generates a 4‑digit release code upon dispatch  
-- 📶 **Offline Verification** – Riders verify via USSD (no internet required)  
-- 📊 **Real‑time Dashboard** – Instant delivery status updates  
-- 🌍 **Africa's Talking Integration** – SMS & USSD powered communication  
-
----
-
-## 🛠️ Tech Stack
+## Tech Stack
 
 **Backend**
-- NestJS
-- Prisma ORM
-- SQLite
+
+-   Django
+-   Django REST Framework
 
 **Frontend**
-- React (Vite)
-- Tailwind CSS v4
 
-**Communication**
-- Africa's Talking SDK (SMS & USSD)
+-   Next.js
+-   React
+-   Tailwind CSS
 
----
+## Getting Started
 
-## 📂 Project Structure
+To get started with TrustDrop, you'll need to have the following installed:
 
-```
-trust-drop/
-├── backend/                # NestJS + Prisma
-│   ├── prisma/             # Database Schema
-│   └── src/                # USSD & SMS Modules
-└── frontend/               # React + Tailwind v4
-    ├── src/                # Retailer Dashboard
-    └── index.css           # Tailwind v4 Configuration
-```
+-   Python 3.10+
+-   Node.js 18+
+-   Poetry
 
----
-
-## ⚙️ Setup & Installation
-
-### 1️⃣ Prerequisites
-
-- Node.js (v18+)
-- Africa's Talking Account (Sandbox or Live)
-- Ngrok (to expose local backend)
-
----
-
-### 2️⃣ Backend Setup
+**1. Clone the repository:**
 
 ```bash
-cd backend
-npm install
-# Add AT_API_KEY and AT_USERNAME to .env
-npx prisma migrate dev --name init
-npm run start:dev
+git clone https://github.com/your-username/trustdrop.git
 ```
 
----
+**2. Install the backend dependencies:**
 
-### 3️⃣ Frontend Setup
+```bash
+cd trustdrop
+poetry install
+```
+
+**3. Install the frontend dependencies:**
 
 ```bash
 cd frontend
 npm install
+```
+
+**4. Run the backend server:**
+
+```bash
+poetry run python manage.py runserver
+```
+
+**5. Run the frontend server:**
+
+```bash
 npm run dev
 ```
 
----
-
-### 4️⃣ USSD Configuration
-
-Expose your backend:
-
-```bash
-ngrok http 3000
-```
-
-In the **Africa's Talking Sandbox**, set:
-
-```
-USSD Callback URL:
-https://your-ngrok-url.ngrok-app.com/ussd/callback
-```
-
----
-
-## 📡 Africa's Talking Integration Details
-
-### 📩 SMS Module
-
-When a retailer clicks **Dispatch**, the system triggers:
-
-```ts
-await at.SMS.send({
-  to: [customerPhone],
-  message: `Your TrustDrop code is: ${releaseCode}. Give this to the rider only when you receive your package.`
-});
-```
-
----
-
-### ☎️ USSD Module
-
-**Rider Flow**
-
-```
-Rider dials: *384*123#
-System: CON Enter Customer Release Code:
-Rider: [enters code]
-System: END Delivery Verified! Status Updated.
-```
-
----
-
-## 🤝 Acknowledgements
-
-Special thanks to the **Africa's Talking team** for providing the infrastructure that makes **offline‑first digital solutions** possible across the continent.
+The application will be available at http://localhost:3000.

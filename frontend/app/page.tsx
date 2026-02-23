@@ -4,61 +4,26 @@ import React, { useState } from "react";
 import { Header } from "@/components/dashboard/header";
 import { StatsCard } from "@/components/dashboard/stats-card";
 import { OrderRow } from "@/components/dashboard/order-row";
-
-const mockOrders = [
-  {
-    id: "1",
-    recipient: "Kofi Mensah",
-    location: "Accra Central, Ghana",
-    status: "in_transit" as const,
-    amount: "Ksh 250.00",
-    time: "2 mins ago",
-  },
-  {
-    id: "2",
-    recipient: "Ama Osei",
-    location: "Kumasi, Ashanti",
-    status: "dispatched" as const,
-    amount: "Ksh 180.50",
-    time: "15 mins ago",
-  },
-  {
-    id: "3",
-    recipient: "Kwame Asare",
-    location: "Tema, Greater Accra",
-    status: "pending" as const,
-    amount: "Ksh 425.00",
-    time: "32 mins ago",
-  },
-  {
-    id: "4",
-    recipient: "Abena Boateng",
-    location: "Cape Coast, Central",
-    status: "delivered" as const,
-    amount: "Ksh 195.75",
-    time: "1 hour ago",
-  },
-  {
-    id: "5",
-    recipient: "Yaw Amoah",
-    location: "Sekondi-Takoradi",
-    status: "in_transit" as const,
-    amount: "Ksh 340.00",
-    time: "45 mins ago",
-  },
-];
+import { useQuery } from "@tanstack/react-query";
+import { getOrders } from "@/lib/api";
+import { Order } from "@/lib/types";
 
 export default function Dashboard() {
   const [expandedFilter, setExpandedFilter] = useState<string | null>(null);
   const [showFilters, setShowFilters] = useState(false);
 
+  const { data: orders = [], isLoading, error } = useQuery<Order[], Error>({
+    queryKey: ["orders"],
+    queryFn: getOrders,
+  });
+
   const filteredOrders =
     expandedFilter && expandedFilter !== "All"
-      ? mockOrders.filter(
+      ? orders.filter(
           (order) =>
             order.status === expandedFilter.toLowerCase().replace(" ", "_"),
         )
-      : mockOrders;
+      : orders;
 
   return (
     <main className="min-h-screen">
@@ -74,27 +39,34 @@ export default function Dashboard() {
           <Header />
 
           {/* Stats Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
             <StatsCard
               icon={<span className="text-2xl">📦</span>}
               title="Total Orders"
-              value="1,284"
+              value={orders.length}
               subtitle="This month"
               trend="up"
             />
             <StatsCard
               icon={<span className="text-2xl">🚚</span>}
               title="Active Dispatches"
-              value="42"
+              value={orders.filter((o) => o.status === "dispatched").length}
               subtitle="In progress"
               trend="up"
             />
             <StatsCard
               icon={<span className="text-2xl">✅</span>}
               title="Verified Deliveries"
-              value="1,156"
+              value={orders.filter((o) => o.status === "delivered").length}
               subtitle="Success rate: 98.2%"
               trend="up"
+            />
+						<StatsCard
+              icon={<span className="text-2xl">⏳</span>}
+              title="Pending Orders"
+              value={orders.filter((o) => o.status === "pending").length}
+              subtitle="Waiting for confirmation"
+              trend="neutral"
             />
           </div>
 
@@ -125,7 +97,7 @@ export default function Dashboard() {
             {/* Quick Filter Chips */}
             {showFilters && (
               <div className="flex gap-2 mb-6 pb-6 border-b border-white/10 overflow-x-auto animate-in fade-in slide-in-from-top-2 duration-200">
-                {["All", "Pending", "In Transit", "Delivered"].map((filter) => (
+                {["All", "Dispatched", "Delivered", "Pending"].map((filter) => (
                   <button
                     key={filter}
                     onClick={() =>
@@ -146,13 +118,21 @@ export default function Dashboard() {
             )}
 
             {/* Orders List */}
-            <div className="space-y-0">
-              {filteredOrders.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {isLoading ? (
+                <div className="col-span-full text-center py-12 text-muted-foreground">
+                  Loading orders...
+                </div>
+              ) : error ? (
+                <div className="col-span-full text-center py-12 text-red-500">
+                  Failed to load orders.
+                </div>
+              ) : filteredOrders.length > 0 ? (
                 filteredOrders.map((order) => (
                   <OrderRow key={order.id} {...order} />
                 ))
               ) : (
-                <div className="text-center py-12 text-muted-foreground">
+                <div className="col-span-full text-center py-12 text-muted-foreground">
                   No orders found matching this filter.
                 </div>
               )}
