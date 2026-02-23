@@ -1,61 +1,54 @@
 # 🛡️ TrustDrop
 
-**TrustDrop** is a secure **Two-Factor Handover (2FH)** verification system built to solve the trust gap in African e-commerce.  
-It ensures deliveries are only marked as **Successful** when a customer provides a unique release code to the rider, verified instantly via **USSD**.
-
-> **Note:** This project was developed for the **Africa's Talking Hackathon (2026)** to demonstrate the power of **low‑tech, high‑security** solutions for the _next billion users_.
+**TrustDrop** is a secure **Two-Factor Handover (2FH)** verification system built to solve the trust gap in African e-commerce using **Africa's Talking** APIs.  
+It ensures deliveries are only marked as **Successful** when a customer provides a unique 6-digit release code to the rider, verified instantly via **SMS** and **USSD**.
 
 ---
 
 ## 🚀 The Problem
 
-In many African markets:
-
-- **Pay on Delivery** → Risky for sellers (cash theft, rider fraud)
-- **Pre‑payment** → Risky for customers (non‑delivery)
-
-**TrustDrop bridges this gap** by replacing physical trust with a **digital handshake**.
+In many African markets, the "Pay on Delivery" model is common but risky. Riders may falsely mark items as delivered, or customers may claim non-receipt.  
+**TrustDrop** bridges this gap by replacing physical trust with a **digital handshake** powered by reliable, offline-accessible technology.
 
 ---
 
 ## ✨ Key Features
 
-- 🔐 **Automated 2FA** – Generates a 4‑digit release code upon dispatch
-- 📶 **Offline Verification** – Riders verify via USSD (no internet required)
-- 📊 **Real‑time Dashboard** – Instant delivery status updates
-- 🌍 **Africa's Talking Integration** – SMS & USSD powered communication
+- 🔐 **Secure Handover** – Generates a unique 6-digit code for every order.
+- 📩 **Automatic SMS** – Sends the delivery code to the customer upon dispatch.
+- 📶 **USSD Verification** – Riders can verify delivery codes instantly via USSD (no internet required on the rider's side).
+- 📊 **Real-time Dashboard** – A sleek Next.js dashboard for retailers to manage dispatches and track delivery statuses.
+- 🌍 **Africa's Talking Integration** – Leveraging SMS for code distribution and USSD for verification.
 
 ---
 
 ## 🛠️ Tech Stack
 
-**Backend**
+### **Backend**
 
-- NestJS
-- Prisma ORM
-- SQLite
+- **Django** & **Django REST Framework**
+- **SQLite** (Database)
+- **Africa's Talking SDK** (SMS & USSD)
 
-**Frontend**
+### **Frontend**
 
-- React (Vite)
-- Tailwind CSS v4
-
-**Communication**
-
-- Africa's Talking SDK (SMS & USSD)
+- **Next.js 15 (App Router)**
+- **Tailwind CSS**
+- **TanStack Query** (Data fetching)
+- **Lucide React** (Icons)
 
 ---
 
 ## 📂 Project Structure
 
-```
-trust-drop/
-├── backend/                # NestJS + Prisma
-│   ├── prisma/             # Database Schema
-│   └── src/                # USSD & SMS Modules
-└── frontend/               # React + Tailwind v4
-    ├── src/                # Retailer Dashboard
-    └── index.css           # Tailwind v4 Configuration
+```text
+TrustDrop/
+├── api/                # Django Application (Models, Views, Serializers)
+├── core/               # Django Project Configuration
+├── frontend/           # Next.js Dashboard
+├── scripts/            # Integration Scripts (SMS, USSD Handler)
+├── manage.py           # Django Management CLI
+└── requirements.txt    # Backend Dependencies
 ```
 
 ---
@@ -64,79 +57,65 @@ trust-drop/
 
 ### 1️⃣ Prerequisites
 
-- Node.js (v18+)
-- Africa's Talking Account (Sandbox or Live)
-- Ngrok (to expose local backend)
-
----
+- **Python 3.10+**
+- **Node.js 18+**
+- **Africa's Talking Account** (Sandbox or Live API Key)
 
 ### 2️⃣ Backend Setup
 
 ```bash
-cd backend
-npm install
-# Add AT_API_KEY and AT_USERNAME to .env
-npx prisma migrate dev --name init
-npm run start:dev
-```
+# Install dependencies
+pip install -r requirements.txt
 
----
+# Setup Database
+python manage.py makemigrations
+python manage.py migrate
+
+# Run Server
+python manage.py runserver 8000
+```
 
 ### 3️⃣ Frontend Setup
 
 ```bash
 cd frontend
-npm install
-npm run dev
+pnpm install  # or npm install
+pnpm dev      # or npm run dev
 ```
 
----
+The dashboard will be available at `http://localhost:3000`.
 
-### 4️⃣ USSD Configuration
+### 4️⃣ USSD Verification Setup
 
-Expose your backend:
+To test USSD verification locally, run the USSD handler script:
 
 ```bash
-ngrok http 3000
+python scripts/ussd_handler.py
 ```
 
-In the **Africa's Talking Sandbox**, set:
-
-```
-USSD Callback URL:
-https://your-ngrok-url.ngrok-app.com/ussd/callback
-```
+_Note: You may need to expose this local server using a tool like ngrok to set the callback URL in the Africa's Talking dashboard._
 
 ---
 
-## 📡 Africa's Talking Integration Details
+## 🛰️ Africa's Talking Integration
 
-### 📩 SMS Module
+### 📩 SMS Flow
 
-When a retailer clicks **Dispatch**, the system triggers:
+When a retailer clicks **Dispatch**, the system:
 
-```ts
-await at.SMS.send({
-  to: [customerPhone],
-  message: `Your TrustDrop code is: ${releaseCode}. Give this to the rider only when you receive your package.`,
-});
-```
+1. Generates a 6-digit code in the database.
+2. Triggers the Africa's Talking SMS API to send the code to the customer.
 
----
+### ☎️ USSD Flow
 
-### ☎️ USSD Module
+**Rider Verification:**
 
-**Rider Flow**
-
-```
-Rider dials: *384*123#
-System: CON Enter Customer Release Code:
-Rider: [enters code]
-System: END Delivery Verified! Status Updated.
-```
+1. Rider dials the USSD service code.
+2. System prompts for the Customer Release Code.
+3. Upon entry, the system verifies the code via the Django API and marks the order as **Delivered**.
 
 ---
 
 ## 🤝 Acknowledgements
 
-Special thanks to the **Africa's Talking team** for providing the infrastructure that makes **offline‑first digital solutions** possible across the continent.
+Special thanks to the **Africa's Talking team** for providing the infrastructure that makes offline-first digital solutions possible across the continent.
